@@ -74,6 +74,28 @@
                                                 class="w-full btn btn-neutral flex items-center justify-center gap-2 text-white font-bold">
                                                 <span>Lihat</span>
                                             </label>
+
+                                            <input type="checkbox" id="lihat_modal_{{ $item->id_buku }}"
+                                                class="modal-toggle" />
+                                            <div class="modal" role="dialog">
+                                                <div class="modal-box" id="modal_box_{{ $item->id_buku }}">
+                                                    <div class="modal-header flex justify-between items-center">
+                                                        <h3 class="text-lg font-bold">Cover Buku</h3>
+                                                        <label for="lihat_modal_{{ $item->id_buku }}"
+                                                            class="btn btn-sm btn-circle btn-ghost">&times;</label>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @php
+                                                            $imagePath = $item->cover ? asset('storage/buku/' . $item->cover) : 'https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png';
+                                                        @endphp
+                                                        <img 
+                                                            src="{{ $imagePath }}" 
+                                                            alt="Image" 
+                                                            class="w-full h-auto"
+                                                            onerror="this.onerror=null; this.src='https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png'">
+                                                    </div>                                                                                                    
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="font-semibold capitalize text-center">{{ $item->judul }}</td>
                                         <td class="font-semibold capitalize text-center">{{ $item->penerbit }}</td>

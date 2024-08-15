@@ -86,14 +86,23 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         @php
-                                                            $imagePath = $item->cover ? asset('storage/buku/' . $item->cover) : 'https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png';
+                                                            $imagePath = $item->cover
+                                                                ? asset('storage/buku/' . $item->cover)
+                                                                : 'https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png';
                                                         @endphp
-                                                        <img 
-                                                            src="{{ $imagePath }}" 
-                                                            alt="Image" 
-                                                            class="w-full h-auto"
+                                                        <img src="{{ $imagePath }}" alt="Image"
+                                                            class="w-full h-auto" loading="lazy"
                                                             onerror="this.onerror=null; this.src='https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png'">
-                                                    </div>                                                                                                    
+                                                        <div class="absolute inset-0 flex items-center justify-center bg-gray-200"
+                                                            style="display: none;">
+                                                            <svg class="animate-spin h-8 w-8 text-gray-500"
+                                                                viewBox="0 0 24 24">
+                                                                <path fill="none" d="M0 0h24v24H0z" />
+                                                                <path
+                                                                    d="M12 4V1L8 5l4 4V6c4.41 0 8 3.59 8 8s-3.59 8-8 8V14H8v2c0 2.21 1.79 4 4 4s4-1.79 4-4h-2c0 1.1-.9 2-2 2-1.1 0-2-.9-2-2h2v-2H7.5C7.22 16.62 7 16.31 7 16v-2H6v2c0 .68.22 1.29.59 1.81L9 21l-1 1H1V1h24v20h-6l-1-1 3-3h-1c0-2.21-1.79-4-4-4z" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
@@ -291,6 +300,21 @@
             </div>
         </div>
     </dialog>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = document.querySelectorAll("img");
+            images.forEach(img => {
+                img.onload = () => {
+                    img.previousElementSibling.style.display = 'none'; // Hide spinner when image loads
+                };
+                img.onerror = () => {
+                    img.src = 'https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png'; // Fallback image
+                    img.previousElementSibling.style.display = 'none'; // Hide spinner on error
+                };
+            });
+        });
+    </script>    
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

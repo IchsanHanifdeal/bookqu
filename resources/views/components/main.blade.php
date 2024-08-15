@@ -17,7 +17,7 @@
 </head>
 
 <body class="flex flex-col mx-auto min-h-screen">
-    {{-- <div id="splash-screen"
+    <div id="splash-screen"
         class="fixed inset-0 flex items-center justify-center bg-gradient-to-r from-pink-200 via-pink-300 to-pink-400 z-[9999] transition-opacity duration-500 ease-in-out opacity-100">
         <div class="p-8 bg-white rounded-lg shadow-lg flex items-center justify-center flex-col relative">
             <div class="animate-spin h-16 w-16 border-t-4 border-pink-600 rounded-full mb-4"></div>
@@ -25,7 +25,7 @@
                 @include('components.brands')
             </div>
         </div>
-    </div> --}}
+    </div>
     <main class="{{ $class ?? 'p-4' }}" role="main">
         {{ $slot }}
 
@@ -63,8 +63,8 @@
                     toast.classList.add('translate-x-full', 'opacity-0');
                     setTimeout(() => {
                         toast.remove();
-                    }, 300); // Match with transition duration
-                }, 5000);
+                    }, 300);
+                }, 15000);
             }
 
             @if (session('toast'))
@@ -72,7 +72,7 @@
             @endif
         </script>
 
-        {{-- <script>
+        <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var splashScreen = document.getElementById('splash-screen');
 
@@ -87,7 +87,7 @@
                 var splashScreen = document.getElementById('splash-screen');
                 splashScreen.classList.add('show');
             });
-        </script> --}}
+        </script>
     </main>
 </body>
 

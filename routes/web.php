@@ -1,8 +1,8 @@
 <?php
 
 use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Buku;
+use App\Models\User;
 use App\Models\Denda;
 use App\Models\Anggota;
 use App\Models\Peminjaman;
@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DendaController;
+use App\Http\Controllers\JenisController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ProfileController;

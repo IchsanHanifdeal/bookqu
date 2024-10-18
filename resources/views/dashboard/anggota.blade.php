@@ -58,7 +58,7 @@
                         <table class="table table-zebra w-full" id="anggotaTable">
                             <thead>
                                 <tr>
-                                    @foreach (['No', 'nama', 'tempat/tanggal lahir', 'no anggota', 'alamat', 'no handphone', 'email', 'tanggal bergabung', 'last update'] as $header)
+                                    @foreach (['No', 'nik', 'nama', 'tempat/tanggal lahir', 'no anggota', 'alamat', 'no handphone', 'email', 'tanggal bergabung', 'last update'] as $header)
                                         <th class="uppercase font-bold text-center">{{ $header }}</th>
                                     @endforeach
                                 </tr>
@@ -67,6 +67,7 @@
                                 @forelse ($anggota as $i => $item)
                                     <tr>
                                         <th class="font-semibold capitalize text-center">{{ $i + 1 }}</th>
+                                        <td class="font-semibold capitalize text-center">{{ $item->nik }}</td>
                                         <td class="font-semibold capitalize text-center">{{ $item->nama }}</td>
                                         <td class="font-semibold capitalize text-center">
                                             {{ $item->tempat . '/' . $item->tanggal_lahir }}</td>
@@ -96,7 +97,7 @@
                                                                 action="{{ route('update.anggota', $item->id_anggota) }}">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                @foreach (['nama', 'tempat', 'tanggal_lahir', 'no_anggota', 'alamat', 'no_hp', 'email'] as $type)
+                                                                @foreach (['nik', 'nama', 'tempat', 'tanggal_lahir', 'no_anggota', 'alamat', 'no_hp', 'email'] as $type)
                                                                     <div class="mb-4 capitalize">
                                                                         <label for="{{ $type }}"
                                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>
@@ -144,7 +145,7 @@
                                                                 @endforeach
                                                                 <div class="modal-action">
                                                                     <button type="button"
-                                                                        onclick="document.getElementById('update_anggota_{{ $item->id }}').close()"
+                                                                        onclick="document.getElementById('update_anggota_{{ $item->id_anggota }}').close()"
                                                                         class="btn">Batal</button>
                                                                     <button type="submit"
                                                                         class="btn btn-primary">Simpan</button>
@@ -211,7 +212,7 @@
             <div class="mt-3">
                 <form method="POST" action="{{ route('store.anggota') }}">
                     @csrf
-                    @foreach (['nama', 'tempat', 'tanggal_lahir', 'no_anggota', 'alamat', 'no_hp', 'email'] as $type)
+                    @foreach (['nik', 'nama', 'tempat', 'tanggal_lahir', 'no_anggota', 'alamat', 'no_hp', 'email'] as $type)
                         <div class="mb-4 capitalize">
                             <label for="{{ $type }}"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>

@@ -56,6 +56,7 @@ class AnggotaController extends Controller
 
         try {
             $validatedData = $request->validate([
+                'nik' => 'required|unique:anggota,nik',
                 'nama' => 'required',
                 'tempat' => 'required',
                 'tanggal_lahir' => 'required|date',
@@ -64,6 +65,7 @@ class AnggotaController extends Controller
                 'no_hp' => ['required', 'unique:anggota,no_hp', 'regex:/^62[0-9]{8,}$/'],
                 'email' => 'required|unique:anggota,email',
             ], [
+                'nik.unique' => 'Nik sudah digunakan.',
                 'nama.required' => 'Nama wajib diisi.',
                 'tempat.required' => 'Tempat wajib diisi.',
                 'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
@@ -168,20 +170,20 @@ class AnggotaController extends Controller
     {
         DB::beginTransaction();
 
-    try {
-        $anggota = Anggota::findOrFail($id_anggota);
-        $anggota->delete();
+        try {
+            $anggota = Anggota::findOrFail($id_anggota);
+            $anggota->delete();
 
-        DB::commit();
+            DB::commit();
 
-        return redirect()->route('anggota.index')->with('toast', [
-            'message' => 'Anggota berhasil dihapus.',
-            'type' => 'success'
-        ]);
-    } catch (\Exception $e) {
-        DB::rollBack();
+            return redirect()->route('anggota.index')->with('toast', [
+                'message' => 'Anggota berhasil dihapus.',
+                'type' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
 
-        return redirect()->back()->withErrors(['message' => 'Gagal menghapus data. Silakan coba lagi.']);
-    }
+            return redirect()->back()->withErrors(['message' => 'Gagal menghapus data. Silakan coba lagi.']);
+        }
     }
 }

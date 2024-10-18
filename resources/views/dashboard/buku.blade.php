@@ -60,7 +60,7 @@
                         <table class="table table-zebra w-full">
                             <thead>
                                 <tr>
-                                    @foreach (['No', 'cover', 'judul', 'penerbit', 'penulis', 'tahun', 'stok'] as $header)
+                                    @foreach (['No', 'cover', 'judul', 'jenis', 'penerbit', 'penulis', 'tahun', 'stok'] as $header)
                                         <th class="uppercase font-bold text-center">{{ $header }}</th>
                                     @endforeach
                                 </tr>
@@ -93,20 +93,12 @@
                                                         <img src="{{ $imagePath }}" alt="Image"
                                                             class="w-full h-auto" loading="lazy"
                                                             onerror="this.onerror=null; this.src='https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png'">
-                                                        <div class="absolute inset-0 flex items-center justify-center bg-gray-200"
-                                                            style="display: none;">
-                                                            <svg class="animate-spin h-8 w-8 text-gray-500"
-                                                                viewBox="0 0 24 24">
-                                                                <path fill="none" d="M0 0h24v24H0z" />
-                                                                <path
-                                                                    d="M12 4V1L8 5l4 4V6c4.41 0 8 3.59 8 8s-3.59 8-8 8V14H8v2c0 2.21 1.79 4 4 4s4-1.79 4-4h-2c0 1.1-.9 2-2 2-1.1 0-2-.9-2-2h2v-2H7.5C7.22 16.62 7 16.31 7 16v-2H6v2c0 .68.22 1.29.59 1.81L9 21l-1 1H1V1h24v20h-6l-1-1 3-3h-1c0-2.21-1.79-4-4-4z" />
-                                                            </svg>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="font-semibold capitalize text-center">{{ $item->judul }}</td>
+                                        <td class="font-semibold capitalize text-center">{{ $item->jenis ?? '-' }}</td>
                                         <td class="font-semibold capitalize text-center">{{ $item->penerbit }}</td>
                                         <td class="font-semibold capitalize text-center">{{ $item->penulis }}</td>
                                         <td class="font-semibold capitalize text-center">{{ $item->tahun }}</td>
@@ -190,6 +182,51 @@
                                                                         @endif
                                                                     </div>
                                                                 @endforeach
+                                                                <div class="mb-4 capitalize">
+                                                                    <label for="jenis"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis
+                                                                        Buku</label>
+                                                                    <select id="jenis" name="jenis"
+                                                                        placeholder="Masukan jenis..."
+                                                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error('jenis') border-red-500 @enderror capitalize">
+                                                                        <option value="">--- Pilih Jenis Buku ---
+                                                                        </option>
+                                                                        <option value="Pelajaran"
+                                                                            {{ old('jenis', $item->jenis) == 'Pelajaran' ? 'selected' : '' }}>
+                                                                            Pelajaran</option>
+                                                                        <option value="Novel"
+                                                                            {{ old('jenis', $item->jenis) == 'Novel' ? 'selected' : '' }}>
+                                                                            Novel</option>
+                                                                        <option value="Majalah"
+                                                                            {{ old('jenis', $item->jenis) == 'Majalah' ? 'selected' : '' }}>
+                                                                            Majalah</option>
+                                                                        <option value="Kamus"
+                                                                            {{ old('jenis', $item->jenis) == 'Kamus' ? 'selected' : '' }}>
+                                                                            Kamus</option>
+                                                                        <option value="Komik"
+                                                                            {{ old('jenis', $item->jenis) == 'Komik' ? 'selected' : '' }}>
+                                                                            Komik</option>
+                                                                        <option value="Manga"
+                                                                            {{ old('jenis', $item->jenis) == 'Manga' ? 'selected' : '' }}>
+                                                                            Manga</option>
+                                                                        <option value="Ensiklopedia"
+                                                                            {{ old('jenis', $item->jenis) == 'Ensiklopedia' ? 'selected' : '' }}>
+                                                                            Ensiklopedia</option>
+                                                                        <option value="Kitab Suci"
+                                                                            {{ old('jenis', $item->jenis) == 'Kitab Suci' ? 'selected' : '' }}>
+                                                                            Kitab Suci</option>
+                                                                        <option value="Biografi"
+                                                                            {{ old('jenis', $item->jenis) == 'Biografi' ? 'selected' : '' }}>
+                                                                            Biografi</option>
+                                                                        <option value="Lainnya"
+                                                                            {{ old('jenis', $item->jenis) == 'Lainnya' ? 'selected' : '' }}>
+                                                                            Lainnya</option>
+                                                                        @error('jenis')
+                                                                            <span
+                                                                                class="text-red-500 text-sm">{{ $message }}</span>
+                                                                        @enderror
+                                                                    </select>
+                                                                </div>
                                                                 <div class="modal-action">
                                                                     <button type="button"
                                                                         onclick="document.getElementById('update_buku_{{ $item->id_buku }}').close()"
@@ -291,6 +328,27 @@
                             @enderror
                         </div>
                     @endforeach
+                    <div class="mb-4 capitalize">
+                        <label for="jenis"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Buku</label>
+                        <select id="jenis" name="jenis" placeholder="Masukan jenis..."
+                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error('jenis') border-red-500 @enderror capitalize">
+                            <option value="">--- Pilih Jenis Buku ---</option>
+                            <option value="Pelajaran">Pelajaran</option>
+                            <option value="Novel">Novel</option>
+                            <option value="Majalah">Majalah</option>
+                            <option value="Kamus">Kamus</option>
+                            <option value="Komik">Komik</option>
+                            <option value="Manga">Manga</option>
+                            <option value="Ensiklopedia">Ensiklopedia</option>
+                            <option value="Kitab Suci">Kitab Suci</option>
+                            <option value="Biografi">Biografi</option>
+                            <option value="Lainnya">lainnya</option>
+                            @error('jenis')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </select>
+                    </div>
                     <div class="modal-action">
                         <button type="button" onclick="document.getElementById('tambah_buku_modal').close()"
                             class="btn">Batal</button>
@@ -300,21 +358,6 @@
             </div>
         </div>
     </dialog>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const images = document.querySelectorAll("img");
-            images.forEach(img => {
-                img.onload = () => {
-                    img.previousElementSibling.style.display = 'none'; // Hide spinner when image loads
-                };
-                img.onerror = () => {
-                    img.src = 'https://www.seoptimer.com/storage/images/2019/05/2744-404-redirection-1.png'; // Fallback image
-                    img.previousElementSibling.style.display = 'none'; // Hide spinner on error
-                };
-            });
-        });
-    </script>    
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

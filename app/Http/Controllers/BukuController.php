@@ -47,6 +47,7 @@ class BukuController extends Controller
             'penulis' => 'required|string',
             'tahun' => 'required|digits:4',
             'stock' => 'required|integer',
+            'jenis' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -70,6 +71,7 @@ class BukuController extends Controller
             $buku->penulis = $request->penulis;
             $buku->tahun = $request->tahun;
             $buku->stock = $request->stock;
+            $buku->jenis = $request->jenis;
             $buku->cover = $fileName;
 
             $buku->save();
@@ -119,6 +121,7 @@ class BukuController extends Controller
             'penulis' => 'required|string',
             'tahun' => 'required|digits:4',
             'stock' => 'required|integer',
+            'jenis' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -146,6 +149,7 @@ class BukuController extends Controller
             $buku->penulis = $request->penulis;
             $buku->tahun = $request->tahun;
             $buku->stock = $request->stock;
+            $buku->jenis = $request->jenis;
             $buku->cover = $fileName;
 
             $buku->save();

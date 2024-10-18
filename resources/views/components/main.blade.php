@@ -17,7 +17,7 @@
 </head>
 
 <body class="flex flex-col mx-auto min-h-screen">
-    <div id="splash-screen"
+    {{-- <div id="splash-screen"
         class="fixed inset-0 flex items-center justify-center bg-gradient-to-r from-pink-200 via-pink-300 to-pink-400 z-[9999] transition-opacity duration-500 ease-in-out opacity-100">
         <div class="p-8 bg-white rounded-lg shadow-lg flex items-center justify-center flex-col relative">
             <div class="animate-spin h-16 w-16 border-t-4 border-pink-600 rounded-full mb-4"></div>
@@ -25,7 +25,7 @@
                 @include('components.brands')
             </div>
         </div>
-    </div>
+    </div> --}}
     <main class="{{ $class ?? 'p-4' }}" role="main">
         {{ $slot }}
 

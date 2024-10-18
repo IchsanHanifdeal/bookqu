@@ -22,6 +22,7 @@ class BukuSeeder extends Seeder
                 'judul' => 'Judul Buku ' . $i,
                 'penerbit' => 'Penerbit ' . Str::random(5),
                 'penulis' => 'Penulis ' . Str::random(5),
+                'jenis' => 'Jenis ' . Str::random(5),
                 'tahun' => rand(1990, 2023),
                 'stock' => rand(1, 100),
                 'created_at' => now(),

@@ -7,6 +7,7 @@ use App\Models\Buku;
 use App\Models\User;
 use App\Models\Denda;
 use App\Models\Anggota;
+use App\Models\Laporan;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -96,7 +97,7 @@ class PeminjamanController extends Controller
                 'jumlah.integer' => 'Jumlah harus berupa angka.',
             ]);
 
-            Peminjaman::create([
+            $peminjaman = Peminjaman::create([
                 'id_user' => $request->petugas,
                 'id_anggota' => $request->anggota,
                 'id_buku' => $request->buku,
@@ -108,6 +109,12 @@ class PeminjamanController extends Controller
             $buku = Buku::find($request->buku);
             $buku->stock -= $request->jumlah;
             $buku->save();
+
+            Laporan::create([
+                'id_peminjaman' => $peminjaman->id_peminjaman,
+                'id_anggota' => $request->anggota,
+                'id_buku' => $request->buku,
+            ]);
 
             DB::commit();
 
@@ -125,31 +132,43 @@ class PeminjamanController extends Controller
         }
     }
 
+
     /**
      * Display the specified resource.
      */
     public function update(Request $request, $id_peminjaman)
     {
         DB::beginTransaction();
-
+    
         try {
+            // Find the peminjaman and buku records
             $peminjaman = Peminjaman::findOrFail($id_peminjaman);
             $buku = Buku::findOrFail($peminjaman->id_buku);
-
+    
+            // Restore the book stock
             $buku->stock += $peminjaman->jumlah;
             $buku->save();
-
+    
+            // Update peminjaman status and return date
             $peminjaman->tanggal_dikembalikan = now();
             $peminjaman->status = 'dikembalikan';
             $peminjaman->save();
-
+    
+            // Update laporan (can refresh or reset some data)
+            Laporan::where('id_peminjaman', $id_peminjaman)->update([
+                'id_peminjaman' => $peminjaman->id_peminjaman, // Refresh the book ID (can replace this with anything logical)
+                'updated_at' => now() // Update timestamp to show the laporan has been updated
+            ]);
+    
+            // Calculate fine if returned late
             $tanggal_pengembalian = Carbon::parse($peminjaman->tanggal_pengembalian);
             $tanggal_dikembalikan = Carbon::parse($peminjaman->tanggal_dikembalikan);
-
+    
             if ($tanggal_dikembalikan->gt($tanggal_pengembalian)) {
                 $daysLate = $tanggal_dikembalikan->diffInDays($tanggal_pengembalian);
                 $fineAmount = $daysLate * 3000;
-
+    
+                // Create a fine record
                 Denda::create([
                     'id_anggota' => $peminjaman->id_anggota,
                     'id_peminjaman' => $peminjaman->id_peminjaman,
@@ -157,22 +176,24 @@ class PeminjamanController extends Controller
                     'status' => 'belum bayar'
                 ]);
             }
-
+    
             DB::commit();
-
+    
             return redirect()->back()->with('toast', [
                 'message' => 'Buku berhasil dikembalikan.',
                 'type' => 'success'
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-
+    
             return redirect()->back()->withErrors(['message' => 'Gagal mengembalikan buku: ' . $e->getMessage()])->with('toast', [
                 'message' => 'Gagal mengembalikan buku: ' . $e->getMessage(),
                 'type' => 'error'
             ]);
         }
     }
+    
+
 
     /**
      * Show the form for editing the specified resource.

@@ -14,6 +14,7 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DendaController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PeminjamanController;
@@ -97,6 +98,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/denda/store', [DendaController::class, 'store'])->name('store.denda');
     Route::put('/dashboard/denda/{id_denda}/update', [DendaController::class, 'update'])->name('update.denda');
     Route::delete('/dashboard/denda/delete', [DendaController::class, 'destroy'])->name('destroy.denda');
+
+    Route::get('/dashboard/laporan', [LaporanController::class, 'index'])->name('laporan');
+    Route::post('/dashboard/laporan/store', [LaporanController::class, 'store'])->name('store.laporan');
+    Route::put('/dashboard/denda/{id_laporan}/update', [LaporanController::class, 'update'])->name('update.laporan');
+    Route::delete('/dashboard/{id_laporan}}/delete', [LaporanController::class, 'destroy'])->name('destroy.laporan');
 
     Route::get('/dashboard/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/dashboard/profile/{id_user}/update', [ProfileController::class, 'update'])->name('update.profile');

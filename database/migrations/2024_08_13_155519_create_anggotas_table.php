@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id('id_anggota');
             $table->string('nik')->unique();
             $table->string('nama');
-            $table->string('tempat');
+            $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
+            $table->enum('jenis_kelamin', ['laki-laki', 'perempuan']);
             $table->string('no_anggota')->unique();
             $table->string('alamat');
             $table->string('no_hp')->unique();

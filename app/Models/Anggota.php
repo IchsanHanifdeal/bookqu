@@ -14,8 +14,9 @@ class Anggota extends Model
     protected $fillable = [
         'nik',
         'nama',
-        'tempat',
+        'tempat_lahir',
         'tanggal_lahir',
+        'jenis_kelamin',
         'no_anggota',
         'alamat',
         'no_hp',

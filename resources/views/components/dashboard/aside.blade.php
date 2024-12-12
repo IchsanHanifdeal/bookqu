@@ -50,6 +50,15 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('laporan') }}"
+                    class="{!! preg_match('#^dashboard/laporan.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
+                    <x-lucide-file />
+                    @if (Auth::user()->role === 'admin')
+                        Kelola
+                    @endif Laporan
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('denda') }}" class="{!! preg_match('#^dashboard/denda.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
                     <x-lucide-receipt />
                     @if (Auth::user()->role === 'admin')

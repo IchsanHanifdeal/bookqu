@@ -58,16 +58,17 @@ class AnggotaController extends Controller
             $validatedData = $request->validate([
                 'nik' => 'required|unique:anggota,nik',
                 'nama' => 'required',
-                'tempat' => 'required',
+                'tempat_lahir' => 'required',
                 'tanggal_lahir' => 'required|date',
                 'no_anggota' => 'required|unique:anggota,no_anggota',
+                'jenis_kelamin' => 'required',
                 'alamat' => 'required',
                 'no_hp' => ['required', 'unique:anggota,no_hp', 'regex:/^62[0-9]{8,}$/'],
                 'email' => 'required|unique:anggota,email',
             ], [
                 'nik.unique' => 'Nik sudah digunakan.',
                 'nama.required' => 'Nama wajib diisi.',
-                'tempat.required' => 'Tempat wajib diisi.',
+                'tempat_lahir.required' => 'Tempat wajib diisi.',
                 'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
                 'tanggal_lahir.date' => 'Tanggal lahir harus berupa tanggal yang valid.',
                 'no_anggota.required' => 'Nomor anggota wajib diisi.',
@@ -124,15 +125,16 @@ class AnggotaController extends Controller
         try {
             $validatedData = $request->validate([
                 'nama' => 'required',
-                'tempat' => 'required',
+                'tempat_lahir' => 'required',
                 'tanggal_lahir' => 'required|date',
                 'no_anggota' => 'required|unique:anggota,no_anggota,' . $id_anggota . ',id_anggota',
                 'alamat' => 'required',
+                'jenis_kelamin' => 'required',
                 'no_hp' => ['required', 'regex:/^62[0-9]{8,}$/', 'unique:anggota,no_hp,' . $id_anggota . ',id_anggota'],
                 'email' => 'required|email|unique:anggota,email,' . $id_anggota . ',id_anggota',
             ], [
                 'nama.required' => 'Nama wajib diisi.',
-                'tempat.required' => 'Tempat wajib diisi.',
+                'tempat_lahir.required' => 'Tempat wajib diisi.',
                 'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
                 'tanggal_lahir.date' => 'Tanggal lahir harus berupa tanggal yang valid.',
                 'no_anggota.required' => 'Nomor anggota wajib diisi.',

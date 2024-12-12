@@ -20,24 +20,26 @@
             </div>
         @endforeach
     </div>
-    <div class="flex flex-col lg:flex-row gap-5">
-        @foreach (['tambah_peminjaman'] as $item)
-            <div onclick="{{ $item . '_modal' }}.showModal()"
-                class="bg-neutral flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full">
-                <div>
-                    <h1
-                        class="text-white font-semibold flex items-start gap-3 font-semibold font-[onest] sm:text-lg capitalize">
-                        {{ str_replace('_', ' ', $item) }}
-                    </h1>
-                    <p class="text-sm opacity-60 text-white">
-                        {{ $item == 'tambah_peminjaman' ? 'Fitur Tambah peminjaman memungkinkan pengguna untuk menambahkan peminjaman baru.' : '' }}
-                    </p>
+    @if (Auth::user()->role === 'admin' || Auth::user()->role === 'petugas')
+        <div class="flex flex-col lg:flex-row gap-5">
+            @foreach (['tambah_peminjaman'] as $item)
+                <div onclick="{{ $item . '_modal' }}.showModal()"
+                    class="bg-neutral flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full">
+                    <div>
+                        <h1
+                            class="text-white font-semibold flex items-start gap-3 font-semibold font-[onest] sm:text-lg capitalize">
+                            {{ str_replace('_', ' ', $item) }}
+                        </h1>
+                        <p class="text-sm opacity-60 text-white">
+                            {{ $item == 'tambah_peminjaman' ? 'Fitur Tambah peminjaman memungkinkan pengguna untuk menambahkan peminjaman baru.' : '' }}
+                        </p>
+                    </div>
+                    <x-lucide-plus
+                        class="{{ $item == 'tambah_peminjaman' ? '' : 'hidden' }} size-5 sm:size-7 font-semibold text-white" />
                 </div>
-                <x-lucide-plus
-                    class="{{ $item == 'tambah_peminjaman' ? '' : 'hidden' }} size-5 sm:size-7 font-semibold text-white" />
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
+    @endif
     <div class="flex gap-5">
         @foreach (['daftar_peminjaman'] as $item)
             <div class="flex flex-col border-back rounded-xl w-full">
@@ -125,7 +127,9 @@
                                                                 class="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300 transition">
                                                                 Batal
                                                             </button>
-                                                            <form action="{{ route('update.peminjaman', $item->id_peminjaman) }}" method="POST" class="inline-block ml-2">
+                                                            <form
+                                                                action="{{ route('update.peminjaman', $item->id_peminjaman) }}"
+                                                                method="POST" class="inline-block ml-2">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <button type="submit"
@@ -164,13 +168,15 @@
                     @csrf
                     @foreach (['petugas', 'anggota', 'buku'] as $type)
                         <div class="mb-4 capitalize">
-                            <label for="{{ $type }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>
+                            <label for="{{ $type }}"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>
                             @if (Auth::user()->role === 'petugas' && $type === 'petugas')
                                 <input type="text" id="{{ $type }}" name="{{ $type }}"
                                     placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
                                     class="bg-gray-700 border border-gray-600 text-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror"
                                     value="{{ Auth::user()->nama }}" disabled />
-                                <input type="hidden" name="{{ $type }}" value="{{ Auth::user()->id_user }}" />
+                                <input type="hidden" name="{{ $type }}"
+                                    value="{{ Auth::user()->id_user }}" />
                             @else
                                 <select name="{{ $type }}" id="{{ $type }}"
                                     class="bg-gray-700 border border-gray-600 text-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror">
@@ -179,19 +185,22 @@
                                         @php
                                             $id = null;
                                             $name = '';
-                
+
                                             if ($type === 'petugas') {
                                                 $id = $item->id_user;
                                                 $name = $item->nama ?: 'Nama Tidak Tersedia';
                                             } elseif ($type === 'anggota') {
                                                 $id = $item->id_anggota;
-                                                $name = $item->no_anggota ? $item->no_anggota . ' - ' . $item->nama : 'Anggota Tidak Tersedia';
+                                                $name = $item->no_anggota
+                                                    ? $item->no_anggota . ' - ' . $item->nama
+                                                    : 'Anggota Tidak Tersedia';
                                             } elseif ($type === 'buku') {
                                                 $id = $item->id_buku;
                                                 $name = $item->judul ?? 'Judul Tidak Tersedia';
                                             }
                                         @endphp
-                                        <option value="{{ $id }}" {{ old($type) == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                        <option value="{{ $id }}" {{ old($type) == $id ? 'selected' : '' }}>
+                                            {{ $name }}</option>
                                     @endforeach
                                 </select>
                             @endif
@@ -202,7 +211,8 @@
                     @endforeach
                     @foreach (['tanggal_peminjaman', 'tanggal_pengembalian', 'jumlah'] as $type)
                         <div class="mb-4 capitalize">
-                            <label for="{{ $type }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>
+                            <label for="{{ $type }}"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>
                             @if ($type === 'jumlah')
                                 <input type="number" id="{{ $type }}" name="{{ $type }}"
                                     placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
@@ -220,7 +230,8 @@
                         </div>
                     @endforeach
                     <div class="modal-action">
-                        <button type="button" onclick="document.getElementById('tambah_peminjaman_modal').close()" class="btn">Batal</button>
+                        <button type="button" onclick="document.getElementById('tambah_peminjaman_modal').close()"
+                            class="btn">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>

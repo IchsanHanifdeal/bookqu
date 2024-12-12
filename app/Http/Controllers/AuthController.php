@@ -54,7 +54,7 @@ class AuthController extends Controller
                 'created_at' => $user->created_at,
             ]);
 
-            if ($userRole === 'admin' || $userRole === 'petugas') {
+            if ($userRole === 'admin' || $userRole === 'petugas' || $userRole === 'pimpinan' || $userRole === 'pengunjung' ) {
                 return redirect()->intended('dashboard')->with('toast', [
                     'message' => 'Login berhasil!',
                     'type' => 'success'

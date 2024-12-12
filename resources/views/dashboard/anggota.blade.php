@@ -20,24 +20,26 @@
             </div>
         @endforeach
     </div>
-    <div class="flex flex-col lg:flex-row gap-5">
-        @foreach (['tambah_anggota'] as $item)
-            <div onclick="{{ $item . '_modal' }}.showModal()"
-                class="bg-neutral flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full">
-                <div>
-                    <h1
-                        class="text-white font-semibold flex items-start gap-3 font-semibold font-[onest] sm:text-lg capitalize">
-                        {{ str_replace('_', ' ', $item) }}
-                    </h1>
-                    <p class="text-sm opacity-60 text-white">
-                        {{ $item == 'tambah_anggota' ? 'Fitur Tambah anggota memungkinkan pengguna untuk menambahkan anggota baru.' : '' }}
-                    </p>
+    @if (Auth::user()->role === 'admin')
+        <div class="flex flex-col lg:flex-row gap-5">
+            @foreach (['tambah_anggota'] as $item)
+                <div onclick="{{ $item . '_modal' }}.showModal()"
+                    class="bg-neutral flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full">
+                    <div>
+                        <h1
+                            class="text-white font-semibold flex items-start gap-3 font-semibold font-[onest] sm:text-lg capitalize">
+                            {{ str_replace('_', ' ', $item) }}
+                        </h1>
+                        <p class="text-sm opacity-60 text-white">
+                            {{ $item == 'tambah_anggota' ? 'Fitur Tambah anggota memungkinkan pengguna untuk menambahkan anggota baru.' : '' }}
+                        </p>
+                    </div>
+                    <x-lucide-plus
+                        class="{{ $item == 'tambah_anggota' ? '' : 'hidden' }} size-5 sm:size-7 font-semibold text-white" />
                 </div>
-                <x-lucide-plus
-                    class="{{ $item == 'tambah_anggota' ? '' : 'hidden' }} size-5 sm:size-7 font-semibold text-white" />
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
+    @endif
     <div class="flex gap-5">
         @foreach (['daftar_anggota'] as $item)
             <div class="flex flex-col border-back rounded-xl w-full">
@@ -139,198 +141,204 @@
                                                                                     {{ old($type, $item->$type) == 'perempuan' ? 'selected' : '' }}>
                                                                                     Perempuan</option>
                                                                             </select>
-                                                                        @error($type)
-                                                                            <span
-                                                                                class="text-red-500 text-sm">{{ $message }}</span>
-                                                                        @enderror
-                                                                    @elseif ($type === 'no_anggota')
-                                                                        <input type="text" id="{{ $type }}"
-                                                                            name="{{ $type }}" readonly
-                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 capitalize"
-                                                                            value="{{ $item->$type }}" />
-                                                                    @else
-                                                                        <input type="text" id="{{ $type }}"
-                                                                            name="{{ $type }}"
-                                                                            placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
-                                                                            class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
-                                                                            value="{{ old($type, $item->$type) }}" />
-                                                                        @error($type)
-                                                                            <span
-                                                                                class="text-red-500 text-sm">{{ $message }}</span>
-                                                                        @enderror
-                                                                @endif
+                                                                            @error($type)
+                                                                                <span
+                                                                                    class="text-red-500 text-sm">{{ $message }}</span>
+                                                                            @enderror
+                                                                        @elseif ($type === 'no_anggota')
+                                                                            <input type="text"
+                                                                                id="{{ $type }}"
+                                                                                name="{{ $type }}" readonly
+                                                                                class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 capitalize"
+                                                                                value="{{ $item->$type }}" />
+                                                                        @else
+                                                                            <input type="text"
+                                                                                id="{{ $type }}"
+                                                                                name="{{ $type }}"
+                                                                                placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
+                                                                                class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
+                                                                                value="{{ old($type, $item->$type) }}" />
+                                                                            @error($type)
+                                                                                <span
+                                                                                    class="text-red-500 text-sm">{{ $message }}</span>
+                                                                            @enderror
+                                                                        @endif
+                                                                    </div>
+                                                                @endforeach
+                                                                <div class="modal-action">
+                                                                    <button type="button"
+                                                                        onclick="document.getElementById('update_anggota_{{ $item->id_anggota }}').close()"
+                                                                        class="btn">Batal</button>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Simpan</button>
+                                                                </div>
+                                                            </form>
                                                         </div>
-                                        @endforeach
-                                        <div class="modal-action">
-                                            <button type="button"
-                                                onclick="document.getElementById('update_anggota_{{ $item->id_anggota }}').close()"
-                                                class="btn">Batal</button>
-                                            <button type="submit" class="btn btn-primary">Simpan</button>
-                                        </div>
-                                        </form>
+                                                    </div>
+                                                </dialog>
+
+                                                <x-lucide-trash class="size-5 hover:stroke-red-500 cursor-pointer"
+                                                    onclick="document.getElementById('hapus_modal_{{ $item->id_anggota }}').showModal();" />
+                                                <dialog id="hapus_modal_{{ $item->id_anggota }}"
+                                                    class="modal modal-bottom sm:modal-middle">
+                                                    <div class="modal-box bg-base-100">
+                                                        <h3 class="text-lg font-bold capitalize">Hapus
+                                                            {{ $item->no_anggota . ' - ' . $item->nama }}
+                                                        </h3>
+                                                        <div class="mt-3">
+                                                            <p class="text-red-800 font-semibold">Perhatian! Anda
+                                                                sedang
+                                                                mencoba untuk menghapus anggota
+                                                                <strong
+                                                                    class="text-red-800 font-bold capitalize">{{ $item->no_anggota . ' - ' . $item->nama }}</strong>.
+                                                                <span class="text-black">Tindakan ini akan menghapus
+                                                                    semua data terkait. Apakah Anda yakin ingin
+                                                                    melanjutkan?</span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-action">
+                                                            <button type="button"
+                                                                onclick="document.getElementById('hapus_modal_{{ $item->id_anggota }}').close()"
+                                                                class="btn">Batal</button>
+                                                            <form
+                                                                action="{{ route('destroy.anggota', $item->id_anggota) }}"
+                                                                method="POST" class="inline-block">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="btn btn-danger">Hapus</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </dialog>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @empty
+                                    <tr id="noDataRow">
+                                        <td colspan="9" class="text-center opacity-60 text-gray-500">Tidak ada
+                                            Anggota</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                </dialog>
-
-                <x-lucide-trash class="size-5 hover:stroke-red-500 cursor-pointer"
-                    onclick="document.getElementById('hapus_modal_{{ $item->id_anggota }}').showModal();" />
-                <dialog id="hapus_modal_{{ $item->id_anggota }}" class="modal modal-bottom sm:modal-middle">
-                    <div class="modal-box bg-base-100">
-                        <h3 class="text-lg font-bold capitalize">Hapus
-                            {{ $item->no_anggota . ' - ' . $item->nama }}
-                        </h3>
-                        <div class="mt-3">
-                            <p class="text-red-800 font-semibold">Perhatian! Anda
-                                sedang
-                                mencoba untuk menghapus anggota
-                                <strong
-                                    class="text-red-800 font-bold capitalize">{{ $item->no_anggota . ' - ' . $item->nama }}</strong>.
-                                <span class="text-black">Tindakan ini akan menghapus
-                                    semua data terkait. Apakah Anda yakin ingin
-                                    melanjutkan?</span>
-                            </p>
-                        </div>
-                        <div class="modal-action">
-                            <button type="button"
-                                onclick="document.getElementById('hapus_modal_{{ $item->id_anggota }}').close()"
-                                class="btn">Batal</button>
-                            <form action="{{ route('destroy.anggota', $item->id_anggota) }}" method="POST"
-                                class="inline-block">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Hapus</button>
-                            </form>
-                        </div>
-                    </div>
-                </dialog>
-                </td>
-        @endif
-        </tr>
-        @empty
-            <tr id="noDataRow">
-                <td colspan="9" class="text-center opacity-60 text-gray-500">Tidak ada
-                    Anggota</td>
-            </tr>
-            @endforelse
-            </tbody>
-            </table>
-        </div>
-        </div>
-        </div>
-        @endforeach
-        </div>
-
-        <dialog id="tambah_anggota_modal" class="modal modal-bottom sm:modal-middle">
-            <div class="modal-box bg-neutral text-white">
-                <h3 class="text-lg font-bold">Tambah Anggota</h3>
-                <div class="mt-3">
-                    <form method="POST" action="{{ route('store.anggota') }}">
-                        @csrf
-                        @foreach (['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'no_anggota', 'alamat', 'no_hp', 'email'] as $type)
-                            <div class="mb-4 capitalize">
-                                <label for="{{ $type }}"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>
-
-                                @if ($type === 'tanggal_lahir')
-                                    <input type="date" id="{{ $type }}" name="{{ $type }}"
-                                        placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
-                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
-                                        value="{{ old($type) }}" />
-                                    @error($type)
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                    @enderror
-                                @elseif ($type === 'jenis_kelamin')
-                                    <select id="{{ $type }}" name="{{ $type }}"
-                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize">
-                                        <option value="">--- Pilih Jenis Kelamin ---</option>
-                                        <option value="laki-laki" {{ old($type) == 'laki-laki' ? 'selected' : '' }}>
-                                            Laki-laki</option>
-                                        <option value="perempuan" {{ old($type) == 'perempuan' ? 'selected' : '' }}>
-                                            Perempuan</option>
-                                    </select>
-                                    @error($type)
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                    @enderror
-                                @elseif ($type === 'no_hp')
-                                    <input type="number" id="{{ $type }}" name="{{ $type }}"
-                                        placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
-                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
-                                        value="{{ old($type) }}" />
-                                    @error($type)
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                    @enderror
-                                @elseif ($type === 'email')
-                                    <input type="email" id="{{ $type }}" name="{{ $type }}"
-                                        placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
-                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
-                                        value="{{ old($type) }}" />
-                                    @error($type)
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                    @enderror
-                                @elseif ($type === 'no_anggota')
-                                    <input type="text" id="{{ $type }}" name="{{ $type }}" readonly
-                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 capitalize"
-                                        value="{{ $no_anggota }}" />
-                                    @error($type)
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                    @enderror
-                                @else
-                                    <input type="text" id="{{ $type }}" name="{{ $type }}"
-                                        placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
-                                        class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
-                                        value="{{ old($type) }}" />
-                                    @error($type)
-                                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                                    @enderror
-                                @endif
-                            </div>
-                        @endforeach
-                        <div class="modal-action">
-                            <button type="button" onclick="document.getElementById('tambah_anggota_modal').close()"
-                                class="btn">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                    </form>
                 </div>
             </div>
-        </dialog>
+        @endforeach
+    </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const searchInput = document.getElementById('searchInput');
-                const table = document.getElementById('anggotaTable');
-                const tbody = table.querySelector('tbody');
-                const noDataRow = document.getElementById('noDataRow');
-                const rows = tbody.querySelectorAll('tr:not(#noDataRow)');
+    <dialog id="tambah_anggota_modal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box bg-neutral text-white">
+            <h3 class="text-lg font-bold">Tambah Anggota</h3>
+            <div class="mt-3">
+                <form method="POST" action="{{ route('store.anggota') }}">
+                    @csrf
+                    @foreach (['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'no_anggota', 'alamat', 'no_hp', 'email'] as $type)
+                        <div class="mb-4 capitalize">
+                            <label for="{{ $type }}"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $type)) }}</label>
 
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = searchInput.value.toLowerCase();
-                    let hasData = false;
+                            @if ($type === 'tanggal_lahir')
+                                <input type="date" id="{{ $type }}" name="{{ $type }}"
+                                    placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
+                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
+                                    value="{{ old($type) }}" />
+                                @error($type)
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            @elseif ($type === 'jenis_kelamin')
+                                <select id="{{ $type }}" name="{{ $type }}"
+                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize">
+                                    <option value="">--- Pilih Jenis Kelamin ---</option>
+                                    <option value="laki-laki" {{ old($type) == 'laki-laki' ? 'selected' : '' }}>
+                                        Laki-laki</option>
+                                    <option value="perempuan" {{ old($type) == 'perempuan' ? 'selected' : '' }}>
+                                        Perempuan</option>
+                                </select>
+                                @error($type)
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            @elseif ($type === 'no_hp')
+                                <input type="number" id="{{ $type }}" name="{{ $type }}"
+                                    placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
+                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
+                                    value="{{ old($type) }}" />
+                                @error($type)
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            @elseif ($type === 'email')
+                                <input type="email" id="{{ $type }}" name="{{ $type }}"
+                                    placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
+                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
+                                    value="{{ old($type) }}" />
+                                @error($type)
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            @elseif ($type === 'no_anggota')
+                                <input type="text" id="{{ $type }}" name="{{ $type }}" readonly
+                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 capitalize"
+                                    value="{{ $no_anggota }}" />
+                                @error($type)
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            @else
+                                <input type="text" id="{{ $type }}" name="{{ $type }}"
+                                    placeholder="Masukan {{ str_replace('_', ' ', $type) }}..."
+                                    class="bg-gray-300 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 @error($type) border-red-500 @enderror capitalize"
+                                    value="{{ old($type) }}" />
+                                @error($type)
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            @endif
+                        </div>
+                    @endforeach
+                    <div class="modal-action">
+                        <button type="button" onclick="document.getElementById('tambah_anggota_modal').close()"
+                            class="btn">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </dialog>
 
-                    rows.forEach(row => {
-                        const cells = row.querySelectorAll('td');
-                        const nameCell = cells[0];
-                        const noAnggotaCell = cells[1];
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const table = document.getElementById('anggotaTable');
+            const tbody = table.querySelector('tbody');
+            const noDataRow = document.getElementById('noDataRow');
+            const rows = tbody.querySelectorAll('tr:not(#noDataRow)');
 
-                        const nameText = nameCell ? nameCell.textContent.toLowerCase() : '';
-                        const noAnggotaText = noAnggotaCell ? noAnggotaCell.textContent.toLowerCase() :
-                            '';
+            searchInput.addEventListener('input', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                let hasData = false;
 
-                        if (nameText.includes(searchTerm) || noAnggotaText.includes(searchTerm)) {
-                            row.style.display = '';
-                            hasData = true;
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    const nameCell = cells[0];
+                    const noAnggotaCell = cells[1];
 
-                    if (hasData) {
-                        noDataRow.style.display = 'none';
+                    const nameText = nameCell ? nameCell.textContent.toLowerCase() : '';
+                    const noAnggotaText = noAnggotaCell ? noAnggotaCell.textContent.toLowerCase() :
+                        '';
+
+                    if (nameText.includes(searchTerm) || noAnggotaText.includes(searchTerm)) {
+                        row.style.display = '';
+                        hasData = true;
                     } else {
-                        noDataRow.style.display = 'table-row';
+                        row.style.display = 'none';
                     }
                 });
-            });
-        </script>
 
-    </x-dashboard.main>
+                if (hasData) {
+                    noDataRow.style.display = 'none';
+                } else {
+                    noDataRow.style.display = 'table-row';
+                }
+            });
+        });
+    </script>
+
+</x-dashboard.main>

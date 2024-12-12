@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DendaController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\LaporanController;
@@ -75,6 +76,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard/buku', [BukuController::class, 'index'])->name('buku');
+
+    Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin');
+
     Route::post('/dashboard/buku/store', [BukuController::class, 'store'])->name('store.buku');
     Route::put('/dashboard/buku/{id_buku}/update', [BukuController::class, 'update'])->name('update.buku');
     Route::delete('/dashboard/buku/{id_buku}/delete', [BukuController::class, 'destroy'])->name('delete.buku');

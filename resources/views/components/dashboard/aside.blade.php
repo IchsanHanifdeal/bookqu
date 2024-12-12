@@ -13,15 +13,29 @@
                     Dashboard
                 </a>
             </li>
-            <li>
-                <a href="{{ route('buku') }}" class="{!! preg_match('#^dashboard/buku.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
-                    <x-lucide-library />
-                    @if (Auth::user()->role === 'admin')
-                        Kelola
-                    @endif Buku
-                </a>
-            </li>
-            @if (Auth::user()->role === 'admin')
+            @if (Auth::user()->role === 'pengunjung' ||
+                    Auth::user()->role === 'admin' ||
+                    Auth::user()->role === 'pimpinan' ||
+                    Auth::user()->role === 'petugas')
+                <li>
+                    <a href="{{ route('buku') }}" class="{!! preg_match('#^dashboard/buku.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
+                        <x-lucide-library />
+                        @if (Auth::user()->role === 'admin')
+                            Kelola
+                        @endif Buku
+                    </a>
+                </li>
+            @endif
+            @if (Auth::user()->role === 'pimpinan')
+                <li>
+                    <a href="{{ route('admin') }}"
+                        class="{!! preg_match('#^dashboard/admin.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
+                        <x-lucide-shield />
+                        Admin
+                    </a>
+                </li>
+            @endif
+            @if (Auth::user()->role === 'admin' || Auth::user()->role === 'pimpinan')
                 <li>
                     <a href="{{ route('petugas') }}"
                         class="{!! preg_match('#^dashboard/petugas.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
@@ -32,40 +46,44 @@
                     </a>
                 </li>
             @endif
-            <li>
-                <a href="{{ route('anggota') }}" class="{!! preg_match('#^dashboard/anggota.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
-                    <x-lucide-users />
-                    @if (Auth::user()->role === 'admin')
-                        Kelola
-                    @endif Anggota
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('peminjaman') }}"
-                    class="{!! preg_match('#^dashboard/peminjaman.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
-                    <x-lucide-cloud-upload />
-                    @if (Auth::user()->role === 'admin')
-                        Kelola
-                    @endif Peminjaman
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('laporan') }}"
-                    class="{!! preg_match('#^dashboard/laporan.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
-                    <x-lucide-file />
-                    @if (Auth::user()->role === 'admin')
-                        Kelola
-                    @endif Laporan
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('denda') }}" class="{!! preg_match('#^dashboard/denda.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
-                    <x-lucide-receipt />
-                    @if (Auth::user()->role === 'admin')
-                        Kelola
-                    @endif Denda
-                </a>
-            </li>
+            @if (Auth::user()->role === 'pimpinan' || Auth::user()->role === 'admin' || Auth::user()->role === 'petugas')
+                <li>
+                    <a href="{{ route('anggota') }}"
+                        class="{!! preg_match('#^dashboard/anggota.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
+                        <x-lucide-users />
+                        @if (Auth::user()->role === 'admin')
+                            Kelola
+                        @endif Anggota
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('peminjaman') }}"
+                        class="{!! preg_match('#^dashboard/peminjaman.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
+                        <x-lucide-cloud-upload />
+                        @if (Auth::user()->role === 'admin')
+                            Kelola
+                        @endif Peminjaman
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('laporan') }}"
+                        class="{!! preg_match('#^dashboard/laporan.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
+                        <x-lucide-file />
+                        @if (Auth::user()->role === 'admin')
+                            Kelola
+                        @endif Laporan
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('denda') }}"
+                        class="{!! preg_match('#^dashboard/denda.*#', Request::path()) ? 'active' : '' !!} flex items-center px-2.5 font-semibold">
+                        <x-lucide-receipt />
+                        @if (Auth::user()->role === 'admin')
+                            Kelola
+                        @endif Denda
+                    </a>
+                </li>
+            @endif
         </div>
         <div class="flex flex-col">
             <span class="label text-xs font-extrabold opacity-50">ADVANCE</span>

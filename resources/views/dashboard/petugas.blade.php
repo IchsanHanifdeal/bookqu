@@ -20,25 +20,26 @@
             </div>
         @endforeach
     </div>
-    <div class="flex flex-col lg:flex-row gap-5">
-        @foreach (['tambah_petugas'] as $item)
-            <div onclick="{{ $item . '_modal' }}.showModal()"
-                class="bg-neutral flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full">
-                <div>
-                    <h1
-                        class="text-white font-semibold flex items-start gap-3 font-semibold font-[onest] sm:text-lg capitalize">
-                        {{ str_replace('_', ' ', $item) }}
-                    </h1>
-                    <p class="text-sm opacity-60 text-white">
-                        {{ $item == 'tambah_petugas' ? 'Fitur Tambah petugas memungkinkan pengguna untuk menambahkan petugas baru.' : '' }}
-                    </p>
+    @if (Auth::user()->role === 'admin')
+        <div class="flex flex-col lg:flex-row gap-5">
+            @foreach (['tambah_petugas'] as $item)
+                <div onclick="{{ $item . '_modal' }}.showModal()"
+                    class="bg-neutral flex items-center justify-between p-5 sm:p-7 hover:shadow-md active:scale-[.97] border border-blue-200 cursor-pointer border-back rounded-xl w-full">
+                    <div>
+                        <h1
+                            class="text-white font-semibold flex items-start gap-3 font-semibold font-[onest] sm:text-lg capitalize">
+                            {{ str_replace('_', ' ', $item) }}
+                        </h1>
+                        <p class="text-sm opacity-60 text-white">
+                            {{ $item == 'tambah_petugas' ? 'Fitur Tambah petugas memungkinkan pengguna untuk menambahkan petugas baru.' : '' }}
+                        </p>
+                    </div>
+                    <x-lucide-plus
+                        class="{{ $item == 'tambah_petugas' ? '' : 'hidden' }} size-5 sm:size-7 font-semibold text-white" />
                 </div>
-                <x-lucide-plus
-                    class="{{ $item == 'tambah_petugas' ? '' : 'hidden' }} size-5 sm:size-7 font-semibold text-white" />
-            </div>
-        @endforeach
-    </div>
-
+            @endforeach
+        </div>
+    @endif
     <div class="flex gap-5">
         @foreach (['daftar_petugas'] as $item)
             <div class="flex flex-col border-back rounded-xl w-full">
